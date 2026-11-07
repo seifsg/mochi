@@ -40,5 +40,8 @@ fn bottom_right(app: &AppHandle) -> tauri::Result<Option<(f64, f64)>> {
     let area = monitor.work_area();
     let right = f64::from(area.position.x) + f64::from(area.size.width);
     let bottom = f64::from(area.position.y) + f64::from(area.size.height);
-    Ok(Some((right / scale - SIZE.0 - MARGIN, bottom / scale - SIZE.1)))
+    Ok(Some((
+        right / scale - SIZE.0 - MARGIN,
+        bottom / scale - SIZE.1,
+    )))
 }

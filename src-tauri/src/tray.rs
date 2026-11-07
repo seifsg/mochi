@@ -12,34 +12,64 @@ pub const TIP_NOW: &str = "tray://tip-now";
 /// UI event: mute changed (payload: bool), so an open bubble hides at once.
 pub const MUTED: &str = "tray://muted";
 
-const AUTOSTART_LABEL: &str = if cfg!(windows) { "Start with Windows" } else { "Open at login" };
+const AUTOSTART_LABEL: &str = if cfg!(windows) {
+    "Start with Windows"
+} else {
+    "Open at login"
+};
 
 /// Builds the tray icon with its menu: Show a tip, Mute tips, Start with Windows, Quit Mochi.
 pub fn create(app: &AppHandle) -> tauri::Result<()> {
     let muted = app.state::<Mute>().is_on();
     let tip = MenuItem::with_id(app, "tip", "Show a tip", true, None::<&str>)?;
     let mute = CheckMenuItem::with_id(app, "mute", "Mute tips", true, muted, None::<&str>)?;
-    let autostart = CheckMenuItem::with_id(app, "autostart", AUTOSTART_LABEL, true, autostart_on(app), None::<&str>)?;
+    let autostart = CheckMenuItem::with_id(
+        app,
+        "autostart",
+        AUTOSTART_LABEL,
+        true,
+        autostart_on(app),
+        None::<&str>,
+    )?;
     let quit = MenuItem::with_id(app, "quit", "Quit Mochi", true, None::<&str>)?;
-    let menu = Menu::with_items(app, &[&tip, &mute, &autostart, &PredefinedMenuItem::separator(app)?, &quit])?;
-    let icon = app.default_window_icon().cloned().ok_or_else(|| tauri::Error::AssetNotFound("app icon".into()))?;
+    let menu = Menu::with_items(
+        app,
+        &[
+            &tip,
+            &mute,
+            &autostart,
+            &PredefinedMenuItem::separator(app)?,
+            &quit,
+        ],
+    )?;
+    let icon = app
+        .default_window_icon()
+        .cloned()
+        .ok_or_else(|| tauri::Error::AssetNotFound("app icon".into()))?;
     TrayIconBuilder::with_id("mochi")
         .icon(icon)
         .tooltip(tooltip(muted))
         .menu(&menu)
-        .on_menu_event(move |app, event| match event.id().as_ref() {
-            "tip" => emit(app, TIP_NOW, ()),
-            "mute" => set_mute(app, &mute),
-            "autostart" => toggle_autostart(app, &autostart),
-            "quit" => app.exit(0),
-            other => log::warn!("unknown tray item {other}"),
+        .on_menu_event(move |app, event| {
+            log::info!("tray: {}", event.id().as_ref());
+            match event.id().as_ref() {
+                "tip" => emit(app, TIP_NOW, ()),
+                "mute" => set_mute(app, &mute),
+                "autostart" => toggle_autostart(app, &autostart),
+                "quit" => app.exit(0),
+                other => log::warn!("unknown tray item {other}"),
+            }
         })
         .build(app)?;
     Ok(())
 }
 
 fn tooltip(muted: bool) -> &'static str {
-    if muted { "Mochi (muted)" } else { "Mochi" }
+    if muted {
+        "Mochi (muted)"
+    } else {
+        "Mochi"
+    }
 }
 
 /// Sends an event to the UI; a failure is logged (the UI also reads mute on its next poll).
@@ -57,7 +87,9 @@ fn set_mute(app: &AppHandle, item: &CheckMenuItem<Wry>) {
     });
     app.state::<Mute>().set(on);
     if let Some(tray) = app.tray_by_id("mochi") {
-        let _ = tray.set_tooltip(Some(tooltip(on))).inspect_err(|e| log::warn!("tooltip: {e}"));
+        let _ = tray
+            .set_tooltip(Some(tooltip(on)))
+            .inspect_err(|e| log::warn!("tooltip: {e}"));
     }
     emit(app, MUTED, on);
 }
@@ -74,9 +106,18 @@ fn autostart_on(app: &AppHandle) -> bool {
 fn toggle_autostart(app: &AppHandle, item: &CheckMenuItem<Wry>) {
     let launcher = app.autolaunch();
     let want = item.is_checked().unwrap_or(false);
-    let result = if want { launcher.enable() } else { launcher.disable() };
+    let result = if want {
+        launcher.enable()
+    } else {
+        launcher.disable()
+    };
     if let Err(e) = result {
-        log::error!("could not turn autostart {}: {e}", if want { "on" } else { "off" });
+        log::error!(
+            "could not turn autostart {}: {e}",
+            if want { "on" } else { "off" }
+        );
     }
-    let _ = item.set_checked(autostart_on(app)).inspect_err(|e| log::warn!("autostart item: {e}"));
+    let _ = item
+        .set_checked(autostart_on(app))
+        .inspect_err(|e| log::warn!("autostart item: {e}"));
 }

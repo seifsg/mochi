@@ -32,7 +32,10 @@ pub fn run() {
                 .with_state_flags(StateFlags::POSITION)
                 .build(),
         )
-        .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, None))
+        .plugin(tauri_plugin_autostart::init(
+            MacosLauncher::LaunchAgent,
+            None,
+        ))
         .on_window_event(|window, event| match event {
             WindowEvent::Moved(origin) => window.state::<hit::HitMap>().moved(*origin),
             WindowEvent::ScaleFactorChanged { scale_factor, .. } => {
@@ -40,7 +43,10 @@ pub fn run() {
             }
             _ => {}
         })
-        .invoke_handler(tauri::generate_handler![context::context, hit::set_hit_rects])
+        .invoke_handler(tauri::generate_handler![
+            context::context,
+            hit::set_hit_rects
+        ])
         .setup(|app| {
             let hits = hit::HitMap::default();
             app.manage(hits.clone());

@@ -21,7 +21,10 @@ impl Mute {
             .inspect_err(|e| log::warn!("no config folder, mute will not persist: {e}"))
             .ok();
         let on = marker.as_ref().is_some_and(|m| m.exists());
-        Self { on: AtomicBool::new(on), marker }
+        Self {
+            on: AtomicBool::new(on),
+            marker,
+        }
     }
 
     pub fn is_on(&self) -> bool {
@@ -33,9 +36,18 @@ impl Mute {
         self.on.store(on, Ordering::Relaxed);
         let Some(marker) = &self.marker else { return };
         let saved = if on {
-            marker.parent().map_or(Ok(()), fs::create_dir_all).and_then(|()| fs::write(marker, b""))
+            marker
+                .parent()
+                .map_or(Ok(()), fs::create_dir_all)
+                .and_then(|()| fs::write(marker, b""))
         } else {
-            fs::remove_file(marker).or_else(|e| if e.kind() == std::io::ErrorKind::NotFound { Ok(()) } else { Err(e) })
+            fs::remove_file(marker).or_else(|e| {
+                if e.kind() == std::io::ErrorKind::NotFound {
+                    Ok(())
+                } else {
+                    Err(e)
+                }
+            })
         };
         if let Err(e) = saved {
             log::error!("could not save mute state to {}: {e}", marker.display());

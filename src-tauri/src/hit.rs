@@ -39,7 +39,9 @@ pub struct HitMap(Arc<Mutex<Geometry>>);
 
 impl HitMap {
     fn lock(&self) -> MutexGuard<'_, Geometry> {
-        self.0.lock().unwrap_or_else(|poisoned| poisoned.into_inner())
+        self.0
+            .lock()
+            .unwrap_or_else(|poisoned| poisoned.into_inner())
     }
 
     /// Window moved (drag, restore): keep the cached origin current.
