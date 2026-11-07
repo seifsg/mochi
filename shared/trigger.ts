@@ -31,7 +31,7 @@ export interface Decision {
 
 /** Why to speak this tick, by priority: start > back from idle > (after cooldown) new app > timer. */
 function reasonFor(watch: Watch, sense: Sense, now: number, away: boolean, appHasTips: (app: string) => boolean): Reason | null {
-  if (!watch.started) return 'start';
+  if (!watch.started) return away ? null : 'start'; // started while away: stay quiet, welcome back instead
   if (watch.away && !away) return 'idle';
   if (now - watch.lastShown < COOLDOWN_MS) return null;
   if (sense.app !== null && sense.app !== watch.app && appHasTips(sense.app)) return 'app';

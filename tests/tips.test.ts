@@ -61,4 +61,7 @@ test('trigger: start, back from idle, new app after cooldown, timer', () => {
   assert.equal(trigger(other.watch, { idleSecs: 0, app: 'code' }, t0 + COOLDOWN_MS + 1, has).reason, 'app');
   assert.equal(trigger(start.watch, { idleSecs: 0, app: 'code' }, t0 + TIMER_MS, has).reason, 'timer');
   assert.equal(trigger(away.watch, { idleSecs: AWAY_SECS + 9, app: 'code' }, t0 + TIMER_MS, has).reason, null, 'no timer while away');
+  const startedAway = trigger(FIRST_WATCH, { idleSecs: AWAY_SECS + 20, app: 'code' }, t0, has);
+  assert.equal(startedAway.reason, null, 'no start tip to an empty desk');
+  assert.equal(trigger(startedAway.watch, { idleSecs: 0, app: 'code' }, t0 + 3000, has).reason, 'idle', 'welcome back instead');
 });
