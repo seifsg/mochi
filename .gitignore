@@ -1,1 +1,8 @@
 .factory/
+node_modules/
+dist/
+app/dist/
+src-tauri/target/
+src-tauri/gen/
+*.log
+.claude/
