@@ -5,7 +5,7 @@ export interface Mascot {
 }
 
 /** Idle acts and their weights; each is a one-shot CSS class (shared/mochi.css). */
-const IDLE_ACTS = ['do-blink', 'do-blink', 'do-blink', 'do-bob', 'do-bob', 'do-wiggle'] as const;
+const IDLE_ACTS = ['do-blink', 'do-blink', 'do-blink', 'do-bob', 'do-wiggle', 'do-wiggle'] as const;
 /** Pause between idle acts: 3-8 s, so the compositor rests most of the time. */
 const nextPause = (): number => 3_000 + Math.random() * 5_000;
 
@@ -25,7 +25,7 @@ export function createMascot(host: HTMLElement): Mascot {
 
   const idle = (): void => {
     const act = IDLE_ACTS[Math.floor(Math.random() * IDLE_ACTS.length)] ?? 'do-blink';
-    if (!(root.classList.contains('is-sleepy') && act === 'do-blink')) play(root, act);
+    if (!root.classList.contains('is-sleepy')) play(root, act);
     window.setTimeout(idle, nextPause());
   };
   window.setTimeout(idle, nextPause());

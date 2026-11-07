@@ -14,7 +14,7 @@
   --leaf: #4f9f5c;
   --card: #fffdfb;
   --edge: #f3c9d4;
-  --shadow: 0 10px 28px rgb(59 47 58 / 0.18), 0 2px 6px rgb(59 47 58 / 0.1);
+  --shadow: 0 10px 24px rgb(255 138 168 / 0.28), 0 2px 6px rgb(59 47 58 / 0.1);
   --radius: 22px;
   color-scheme: light;
   font-family: 'Nunito Variable', 'Segoe UI', system-ui, sans-serif;
@@ -148,6 +148,11 @@ h1 {
   gap: 12px;
   align-items: stretch;
 }
+.actions .button {
+  flex: 1 1 200px;
+  align-items: center;
+  text-align: center;
+}
 .button {
   display: inline-flex;
   flex-direction: column;
@@ -171,11 +176,17 @@ h1 {
   color: var(--accent-ink);
   box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 40%, transparent);
 }
-.button.primary.is-soon {
-  background: var(--panel);
-  color: var(--ink);
-  border: 2px dashed var(--accent);
-  box-shadow: none;
+.badge {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-ink);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 2px;
 }
 .button-label {
   font-size: 1.05rem;
@@ -205,9 +216,10 @@ h1 {
   padding: 18px 18px 22px;
   border-radius: 28px;
   background:
-    radial-gradient(120% 90% at 20% 10%, #8fa3d1, transparent 60%),
-    linear-gradient(160deg, #6f7fb0, #4d5b86);
-  box-shadow: var(--shadow), inset 0 0 0 1px rgb(255 255 255 / 0.15);
+    radial-gradient(90% 70% at 15% 10%, #ffffff, transparent 60%),
+    radial-gradient(80% 60% at 90% 100%, #ffd9e4, transparent 70%),
+    linear-gradient(160deg, #dfe6ff, #eadcff);
+  box-shadow: var(--shadow), inset 0 0 0 1px rgb(255 255 255 / 0.6);
   overflow: hidden;
 }
 .scene {
@@ -217,8 +229,8 @@ h1 {
   margin: 0;
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.18);
-  color: #fff;
+  background: rgb(255 255 255 / 0.75);
+  color: #3b2f3a;
   font-weight: 800;
   font-size: 0.85rem;
   backdrop-filter: blur(6px);
@@ -237,7 +249,7 @@ h1 {
   cursor: pointer;
 }
 .buddy:focus-visible {
-  outline: 3px solid #fff;
+  outline: 3px solid var(--accent);
   outline-offset: 6px;
   border-radius: 24px;
 }
@@ -283,7 +295,8 @@ h2 {
   box-shadow: 0 1px 0 var(--line);
 }
 .card-icon {
-  font-size: 1.6rem;
+  width: 36px;
+  height: 36px;
 }
 .card h3 {
   margin: 10px 0 6px;
@@ -391,10 +404,8 @@ h2 {
   .top nav a:not([href^='https']) {
     display: none;
   }
-  .actions .button {
-    flex: 1 1 100%;
-    text-align: center;
-    align-items: center;
+  .lede {
+    font-size: 1.02rem;
   }
 }
 

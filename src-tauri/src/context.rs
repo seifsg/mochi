@@ -13,8 +13,9 @@ pub struct Sense {
 }
 
 /// Reads user idle time and the foreground app; the UI polls it to decide when to speak.
+/// Async so the OS reads run off the main (UI) thread.
 #[tauri::command]
-pub fn context(mute: State<'_, Mute>) -> Result<Sense, String> {
+pub async fn context(mute: State<'_, Mute>) -> Result<Sense, String> {
     let idle =
         user_idle::UserIdle::get_time().map_err(|e| format!("idle time unavailable: {e}"))?;
     Ok(Sense {

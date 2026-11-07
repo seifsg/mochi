@@ -21,12 +21,15 @@ function showRelease(release: Release): void {
       label.textContent = 'Download for Windows';
       meta.textContent = `${release.version} · ${release.sizeMb.toFixed(1)} MB · free`;
       return;
-    case 'none':
+    case 'none': {
       button.href = RELEASES_URL;
-      button.classList.add('is-soon');
-      label.textContent = 'Download coming soon';
-      meta.textContent = 'The first installer is on its way. Watch the releases page.';
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = 'Soon';
+      label.replaceChildren('Download for Windows', badge);
+      meta.textContent = 'The first installer is on its way';
       return;
+    }
     case 'unknown':
       console.warn(`Mochi site: release check failed (${release.reason})`);
       button.href = RELEASES_URL;

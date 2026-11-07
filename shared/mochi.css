@@ -1,7 +1,7 @@
 /*
  * Mochi mascot. Stacked HTML layers, so motion is composited transforms only.
- * Motion is short one-shot acts (blink, bob, wiggle, hop) triggered from script: between acts nothing animates,
- * so the compositor idles and Mochi costs near-zero CPU.
+ * A gentle breath runs at 4 steps per second (steps() keeps frames rare, so the compositor mostly idles);
+ * short one-shot acts (blink, bob, wiggle, hop) come from script.
  */
 .mochi {
   position: relative;
@@ -20,6 +20,11 @@
 }
 .mochi-body {
   transform-origin: 50% 92%;
+  animation: mochi-breathe 4s steps(16) infinite;
+}
+.mochi-face-sleepy,
+.mochi-face-happy {
+  visibility: hidden;
 }
 .mochi-shadow {
   transform-origin: 50% 94%;
@@ -43,7 +48,18 @@
 .mochi.do-wiggle .mochi-leaf {
   animation: mochi-wiggle 1.4s ease-in-out;
 }
-/* Tip arrives: one happy hop (wins over a bob on the same layer). */
+/* User away: Mochi dozes (closed eyes, a little "z z", slower breath). */
+.mochi.is-sleepy .mochi-eyes {
+  visibility: hidden;
+}
+.mochi.is-sleepy .mochi-face-sleepy {
+  visibility: visible;
+}
+.mochi.is-sleepy .mochi-body {
+  animation-duration: 6.5s;
+}
+
+/* Tip arrives: one happy hop (declared after bob and sleepy, so it wins on the same layer). */
 .mochi.do-hop .mochi-body {
   animation: mochi-hop 0.7s cubic-bezier(0.3, 1.5, 0.5, 1);
 }
@@ -51,12 +67,20 @@
   animation: mochi-hop-shadow 0.7s ease-out;
 }
 
-/* User away: Mochi dozes with its eyes shut. */
-.mochi.is-sleepy .mochi-eyes {
-  transform: scaleY(0.12);
-  animation: none;
+/* Tip arrives: happy ^ ^ eyes for the hop. */
+.mochi.do-hop .mochi-eyes {
+  visibility: hidden;
+}
+.mochi.do-hop .mochi-face-happy {
+  visibility: visible;
+}
+.mochi.do-hop .mochi-face-sleepy {
+  visibility: hidden;
 }
 
+@keyframes mochi-breathe {
+  50% { transform: scale(1.018, 0.982); }
+}
 @keyframes mochi-blink {
   50% { transform: scaleY(0.1); }
 }

@@ -4,7 +4,8 @@
   "description": "Mochi window: read context, drag itself, listen to tray events, log.",
   "windows": ["main"],
   "permissions": [
-    "core:default",
+    "core:event:allow-listen",
+    "core:event:allow-unlisten",
     "core:window:allow-start-dragging",
     "log:default"
   ]

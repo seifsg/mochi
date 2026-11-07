@@ -2,6 +2,9 @@
 export const REPO = 'seifsg/mochi';
 export const ASSET = 'Mochi-setup.exe';
 export const RELEASES_URL = `https://github.com/${REPO}/releases`;
+/** Only installer links from this repo's releases are accepted from the API. */
+const DOWNLOAD_PREFIX = `${RELEASES_URL}/download/`;
+const TIMEOUT_MS = 5_000;
 
 /** Latest release state for the download button. */
 export type Release =
@@ -20,7 +23,7 @@ function toRelease(body: unknown): Release {
   if (typeof body !== 'object' || body === null) return { kind: 'unknown', reason: 'unexpected response' };
   const { tag_name: tag, assets } = body as { tag_name?: unknown; assets?: unknown };
   const asset = Array.isArray(assets)
-    ? (assets as ApiAsset[]).find((a) => a?.name === ASSET && typeof a.browser_download_url === 'string')
+    ? (assets as ApiAsset[]).find((a) => a?.name === ASSET && a.browser_download_url?.startsWith(DOWNLOAD_PREFIX))
     : undefined;
   if (typeof tag !== 'string' || !asset) return { kind: 'none' };
   return { kind: 'ready', url: asset.browser_download_url, version: tag, sizeMb: asset.size / 1_048_576 };
@@ -31,6 +34,7 @@ export async function latestRelease(fetcher: typeof fetch = fetch): Promise<Rele
   try {
     const res = await fetcher(`https://api.github.com/repos/${REPO}/releases/latest`, {
       headers: { Accept: 'application/vnd.github+json' },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (res.status === 404) return { kind: 'none' };
     if (!res.ok) return { kind: 'unknown', reason: `GitHub answered ${res.status}` };

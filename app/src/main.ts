@@ -48,11 +48,12 @@ function boot(): void {
   // Tap: hide the open bubble, or poke Mochi for a tip.
   makeDraggable(byId('stage'), () => (bubble.isOpen() ? bubble.hide() : brain.say('manual')));
   // Tray (and a second launch) talk to the UI through these events; names match src-tauri/src/tray.rs.
-  void listen('tray://tip-now', () => brain.say('manual'));
-  void listen<boolean>('tray://muted', ({ payload }) => {
+  const failed = (error: unknown): void => void warn(`tray events unavailable: ${String(error)}`);
+  listen('tray://tip-now', () => brain.say('manual')).catch(failed);
+  listen<boolean>('tray://muted', ({ payload }) => {
     brain.mute(payload);
     if (payload) bubble.hide();
-  });
+  }).catch(failed);
   void poll(brain);
 }
 

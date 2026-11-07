@@ -31,7 +31,7 @@ npm run app:dev
 | `npm run dev` | landing page dev server |
 | `npm run build` | landing page into `dist/` |
 
-Tips live in [`shared/tips.json`](shared/tips.json). Each tip has an `id`, a `text` (up to 160 characters) and at most one of: `apps` (exe names such as `code` or `excel`), `idle: true` (welcome back), or `times` (`morning`, `afternoon`, `evening`, `night`). Run `npm test` after editing.
+Tips live in [`shared/tips.json`](shared/tips.json). Each tip has an `id`, a `text` (up to 120 characters, so it fits the bubble) and at most one of: `apps` (exe names such as `code` or `excel`), `idle: true` (welcome back), or `times` (`morning`, `afternoon`, `evening`, `night`). Run `npm test` after editing.
 
 ## Privacy
 

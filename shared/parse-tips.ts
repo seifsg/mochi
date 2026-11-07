@@ -2,7 +2,8 @@ import { BUCKETS, type Tip } from './tips.ts';
 
 const KEYS = new Set(['id', 'text', 'apps', 'idle', 'times']);
 const SLUG = /^[a-z0-9][a-z0-9._-]*$/;
-export const MAX_TEXT = 160;
+/** Longest tip that still fits the bubble slot above Mochi in the 300 px window. */
+export const MAX_TEXT = 120;
 
 /** Throws a readable error naming the bad tip. */
 function fail(index: number, problem: string): never {
