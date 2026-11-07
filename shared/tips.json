@@ -1,0 +1,103 @@
+[
+  { "id": "morning-win", "text": "Good morning! What one thing would make today a win? ☀️", "times": ["morning"] },
+  { "id": "morning-water", "text": "Morning! Water first, then coffee. 💧", "times": ["morning"] },
+  { "id": "morning-top3", "text": "Pick your top 3 tasks before you open email.", "times": ["morning"] },
+  { "id": "morning-hard-first", "text": "Fresh brain hours! Tackle the hardest task first.", "times": ["morning"] },
+  { "id": "afternoon-walk", "text": "Afternoon slump? A 5-minute walk beats a third coffee.", "times": ["afternoon"] },
+  { "id": "afternoon-stretch", "text": "Stand up and stretch for a minute. I'll wait. 🙆", "times": ["afternoon"] },
+  { "id": "afternoon-lunch", "text": "Lunch tastes better away from the screen. 🍙", "times": ["afternoon"] },
+  { "id": "afternoon-check", "text": "Halfway check: is the morning's top task done yet?", "times": ["afternoon"] },
+  { "id": "evening-tomorrow", "text": "Write down tomorrow's first task, then let today go. 📝", "times": ["evening"] },
+  { "id": "evening-night-light", "text": "Night light is easier on the eyes: Settings > System > Display. 🌙", "times": ["evening"] },
+  { "id": "evening-save", "text": "Wrapping up? Save or commit your work. 💾", "times": ["evening"] },
+  { "id": "evening-proud", "text": "Name one thing you did today that you're proud of. ✨", "times": ["evening"] },
+  { "id": "night-sleep", "text": "It's late. Sleep is a feature, not a bug. 😴", "times": ["night"] },
+  { "id": "night-dim", "text": "Night owl mode? Dim the screen a little.", "times": ["night"] },
+  { "id": "night-wrap", "text": "Save everything, then rest. Tomorrow-you says thanks. 🌙", "times": ["night"] },
+  { "id": "win-snip", "text": "Win+Shift+S snips any part of your screen." },
+  { "id": "win-clipboard", "text": "Win+V shows your clipboard history (turn it on the first time)." },
+  { "id": "win-emoji", "text": "Win+. opens emoji and symbols. 🍡" },
+  { "id": "win-desktop", "text": "Win+D shows the desktop. Press it again to bring everything back." },
+  { "id": "win-snap", "text": "Win+Z shows snap layouts for the window you're in." },
+  { "id": "win-taskmgr", "text": "Ctrl+Shift+Esc opens Task Manager directly." },
+  { "id": "win-vdesk", "text": "Win+Ctrl+D makes a fresh virtual desktop. Win+Ctrl+Left/Right to switch." },
+  { "id": "win-lock", "text": "Win+L locks your PC when you step away. 🔒" },
+  { "id": "care-blink", "text": "Blink! Screens make us blink less. 👀" },
+  { "id": "care-20", "text": "20-20-20: every 20 minutes, look 20 feet away for 20 seconds." },
+  { "id": "care-water", "text": "Sip some water. Mochi approves. 💧" },
+  { "id": "care-shoulders", "text": "Shoulders down, jaw relaxed. Better?" },
+  { "id": "care-posture", "text": "Feet flat, back supported, screen at eye level. 🪑" },
+  { "id": "care-breathe", "text": "Three slow breaths. In through the nose, out through the mouth." },
+
+  { "id": "idle-welcome", "text": "Welcome back! 🍡", "idle": true },
+  { "id": "idle-where", "text": "Welcome back! Where were we?", "idle": true },
+  { "id": "idle-warm", "text": "Back already? I kept your spot warm.", "idle": true },
+  { "id": "idle-stretch", "text": "Hi again! A quick stretch before diving back in?", "idle": true },
+  { "id": "idle-lock", "text": "Welcome back. Next time Win+L locks your PC while you're away. 🔒", "idle": true },
+  { "id": "idle-water", "text": "Welcome back! Grab some water on the way in? 💧", "idle": true },
+
+  { "id": "code-quick-open", "text": "Ctrl+P opens any file by name. Type :42 to jump to line 42.", "apps": ["code", "cursor", "windsurf"] },
+  { "id": "code-palette", "text": "Ctrl+Shift+P opens the Command Palette: every command, one search away.", "apps": ["code", "cursor", "windsurf"] },
+  { "id": "code-move-line", "text": "Alt+Up/Down moves the current line. Add Shift to copy it instead.", "apps": ["code", "cursor", "windsurf"] },
+  { "id": "code-multi", "text": "Ctrl+D selects the next match too. Multi-cursor magic! ✨", "apps": ["code", "cursor", "windsurf"] },
+  { "id": "code-rename", "text": "F2 renames a symbol everywhere it's used.", "apps": ["code", "cursor", "windsurf"] },
+  { "id": "code-terminal", "text": "Ctrl+` toggles the built-in terminal.", "apps": ["code", "cursor", "windsurf"] },
+
+  { "id": "term-split", "text": "Alt+Shift+D splits the pane in Windows Terminal.", "apps": ["windowsterminal"] },
+  { "id": "term-find", "text": "Ctrl+Shift+F searches the terminal output.", "apps": ["windowsterminal"] },
+  { "id": "term-history", "text": "Ctrl+R searches your PowerShell history.", "apps": ["windowsterminal", "powershell", "pwsh"] },
+  { "id": "term-cls", "text": "Ctrl+L clears the screen in PowerShell.", "apps": ["windowsterminal", "powershell", "pwsh"] },
+
+  { "id": "explorer-folder", "text": "Ctrl+Shift+N makes a new folder right here. 📁", "apps": ["explorer"] },
+  { "id": "explorer-up", "text": "Alt+Up goes up one folder.", "apps": ["explorer"] },
+  { "id": "explorer-tab", "text": "Ctrl+T opens a new File Explorer tab.", "apps": ["explorer"] },
+  { "id": "explorer-path", "text": "Ctrl+Shift+C copies the selected file's path.", "apps": ["explorer"] },
+
+  { "id": "web-reopen", "text": "Ctrl+Shift+T brings back the tab you just closed.", "apps": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi"] },
+  { "id": "web-address", "text": "Ctrl+L jumps straight to the address bar.", "apps": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi"] },
+  { "id": "web-tabs", "text": "Ctrl+1 to Ctrl+8 jump to a tab. Ctrl+9 goes to the last one.", "apps": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi"] },
+  { "id": "web-middle", "text": "Middle-click a link to open it in a new tab.", "apps": ["chrome", "msedge", "firefox", "brave", "opera", "vivaldi"] },
+
+  { "id": "excel-today", "text": "Ctrl+; types today's date into the cell. 📅", "apps": ["excel"] },
+  { "id": "excel-edge", "text": "Ctrl+Arrow jumps to the edge of your data.", "apps": ["excel"] },
+  { "id": "excel-f4", "text": "F4 repeats your last action, or toggles $ references in a formula.", "apps": ["excel"] },
+  { "id": "excel-table", "text": "Ctrl+T turns your range into a table with filters.", "apps": ["excel"] },
+  { "id": "excel-sum", "text": "Alt+= adds a quick SUM.", "apps": ["excel"] },
+
+  { "id": "word-case", "text": "Shift+F3 cycles UPPER, lower and Title case.", "apps": ["winword"] },
+  { "id": "word-break", "text": "Ctrl+Enter starts a new page.", "apps": ["winword"] },
+  { "id": "word-move", "text": "Alt+Shift+Up/Down moves the whole paragraph.", "apps": ["winword"] },
+
+  { "id": "ppt-show", "text": "F5 starts the slideshow. Shift+F5 starts from this slide.", "apps": ["powerpnt"] },
+  { "id": "ppt-black", "text": "Press B during a slideshow to black the screen. Press again to return.", "apps": ["powerpnt"] },
+  { "id": "ppt-dup", "text": "Ctrl+D duplicates the selected slide or shape.", "apps": ["powerpnt"] },
+
+  { "id": "mail-new", "text": "Ctrl+N starts a new email.", "apps": ["outlook", "olk"] },
+  { "id": "mail-reply", "text": "Ctrl+R replies. Ctrl+Shift+R replies to all.", "apps": ["outlook", "olk"] },
+
+  { "id": "teams-mute", "text": "Ctrl+Shift+M mutes or unmutes you in a call.", "apps": ["ms-teams", "teams"] },
+  { "id": "teams-camera", "text": "Ctrl+Shift+O turns your camera on or off.", "apps": ["ms-teams", "teams"] },
+  { "id": "teams-search", "text": "Ctrl+E jumps to search.", "apps": ["ms-teams", "teams"] },
+
+  { "id": "slack-switch", "text": "Ctrl+K jumps to any channel or person.", "apps": ["slack"] },
+  { "id": "slack-unreads", "text": "Ctrl+Shift+A shows all your unreads.", "apps": ["slack"] },
+  { "id": "slack-edit", "text": "Press Up in an empty message box to edit your last message.", "apps": ["slack", "discord"] },
+
+  { "id": "discord-switch", "text": "Ctrl+K opens the quick switcher.", "apps": ["discord"] },
+  { "id": "discord-mute", "text": "Ctrl+Shift+M toggles your mic.", "apps": ["discord"] },
+
+  { "id": "zoom-mute", "text": "Alt+A mutes or unmutes you.", "apps": ["zoom"] },
+  { "id": "zoom-video", "text": "Alt+V turns your video on or off.", "apps": ["zoom"] },
+
+  { "id": "notepad-time", "text": "F5 stamps the current time and date.", "apps": ["notepad"] },
+  { "id": "notepad-tab", "text": "Ctrl+N opens a new tab. Ctrl+W closes it.", "apps": ["notepad"] },
+
+  { "id": "figma-actions", "text": "Ctrl+/ opens quick actions.", "apps": ["figma"] },
+  { "id": "figma-autolayout", "text": "Shift+A wraps your selection in auto layout.", "apps": ["figma"] },
+
+  { "id": "obsidian-switch", "text": "Ctrl+O opens the quick switcher.", "apps": ["obsidian"] },
+  { "id": "obsidian-palette", "text": "Ctrl+P opens the command palette.", "apps": ["obsidian"] },
+
+  { "id": "notion-search", "text": "Ctrl+P searches every page.", "apps": ["notion"] },
+  { "id": "notion-slash", "text": "Type / to add any block.", "apps": ["notion"] }
+]
