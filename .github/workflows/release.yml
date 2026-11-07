@@ -1,0 +1,68 @@
+# Builds the Windows installer. Pull requests get it as a workflow artifact;
+# a pushed version tag (v1.2.3) publishes it to a GitHub Release as Mochi-setup.exe,
+# the stable name the landing page's download button links to.
+name: release
+
+on:
+  pull_request:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install
+        run: npm ci
+
+      - name: Check
+        run: npm run check
+
+      - name: Tag matches app version
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          app="v$(node -p "require('./src-tauri/tauri.conf.json').version")"
+          [ "$app" = "$GITHUB_REF_NAME" ] || { echo "tag $GITHUB_REF_NAME != app $app (src-tauri/tauri.conf.json)"; exit 1; }
+
+      - name: Build installer
+        run: npx tauri build --bundles nsis
+
+      - name: Stable installer name
+        shell: bash
+        run: cp src-tauri/target/release/bundle/nsis/*-setup.exe Mochi-setup.exe
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Mochi-setup
+          path: Mochi-setup.exe
+          if-no-files-found: error
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" Mochi-setup.exe --title "Mochi $GITHUB_REF_NAME" --generate-notes
