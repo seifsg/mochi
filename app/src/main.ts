@@ -6,10 +6,10 @@ import { listen } from '@tauri-apps/api/event';
 import { warn } from '@tauri-apps/plugin-log';
 import { parseTips } from '../../shared/parse-tips.ts';
 import { createBrain, type Brain, type Reading } from './brain.ts';
-import { createBubble } from './bubble.ts';
+import { createBubble } from '../../shared/bubble.ts';
 import { makeDraggable } from './drag.ts';
 import { reportHitAreas } from './hit.ts';
-import { createMascot } from './mascot.ts';
+import { createMascot } from '../../shared/mascot.ts';
 
 /** How often Mochi asks the OS for idle time and the foreground app. */
 const POLL_MS = 3_000;
