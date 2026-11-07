@@ -7,11 +7,9 @@ use std::{
 use serde::Deserialize;
 use tauri::{PhysicalPosition, State, WebviewWindow};
 
-/// Cursor checks: quick near Mochi, slow when the cursor is far (fewer wake-ups).
-const TICK_NEAR: Duration = Duration::from_millis(80);
-const TICK_FAR: Duration = Duration::from_millis(250);
-/// Distance (logical px) from the visible parts that still counts as near.
-const NEAR_PX: f64 = 120.0;
+/// How often the cursor is checked. A fixed short tick keeps a quick move-and-click on Mochi from
+/// falling through (a slower "far" tick lost such clicks in testing); measured cost: ~0.16% of one core.
+const TICK: Duration = Duration::from_millis(80);
 /// The UI reports at most mascot + bubble; a few spare slots, never an unbounded list.
 const MAX_RECTS: usize = 4;
 
@@ -25,12 +23,8 @@ pub struct Rect {
 }
 
 impl Rect {
-    /// True when the point is inside, grown by `margin` on every side.
-    fn reaches(&self, x: f64, y: f64, margin: f64) -> bool {
-        x >= self.x - margin
-            && x < self.x + self.w + margin
-            && y >= self.y - margin
-            && y < self.y + self.h + margin
+    fn contains(&self, x: f64, y: f64) -> bool {
+        x >= self.x && x < self.x + self.w && y >= self.y && y < self.y + self.h
     }
 
     fn is_valid(&self) -> bool {
@@ -40,14 +34,6 @@ impl Rect {
             && self.w >= 0.0
             && self.h >= 0.0
     }
-}
-
-/// Where the cursor is relative to Mochi's visible parts.
-#[derive(PartialEq)]
-enum Reach {
-    Over,
-    Near,
-    Far,
 }
 
 /// Where the visible parts are on screen: rects from the UI, window origin and scale from window events.
@@ -79,21 +65,15 @@ impl HitMap {
         self.lock().scale = scale;
     }
 
-    /// Classifies a screen point against the visible parts of Mochi.
-    fn reach(&self, cursor: PhysicalPosition<f64>) -> Reach {
+    /// True when the screen point is over a visible part of Mochi.
+    fn covers(&self, cursor: PhysicalPosition<f64>) -> bool {
         let g = self.lock();
         if g.scale <= 0.0 {
-            return Reach::Far;
+            return false;
         }
         let x = (cursor.x - f64::from(g.origin.x)) / g.scale;
         let y = (cursor.y - f64::from(g.origin.y)) / g.scale;
-        if g.rects.iter().any(|r| r.reaches(x, y, 0.0)) {
-            Reach::Over
-        } else if g.rects.iter().any(|r| r.reaches(x, y, NEAR_PX)) {
-            Reach::Near
-        } else {
-            Reach::Far
-        }
+        g.rects.iter().any(|r| r.contains(x, y))
     }
 }
 
@@ -117,23 +97,16 @@ pub fn watch(window: WebviewWindow, map: HitMap) -> tauri::Result<()> {
     map.rescaled(window.scale_factor()?);
     thread::spawn(move || {
         let mut ignoring = false;
-        let mut tick = TICK_NEAR;
         loop {
-            thread::sleep(tick);
-            let reach = match window.cursor_position() {
-                Ok(cursor) => map.reach(cursor),
+            thread::sleep(TICK);
+            let over = match window.cursor_position() {
+                Ok(cursor) => map.covers(cursor),
                 Err(tauri::Error::WindowNotFound) => return,
                 Err(e) => {
                     log::warn!("hit test skipped: {e}");
                     continue;
                 }
             };
-            tick = if reach == Reach::Far {
-                TICK_FAR
-            } else {
-                TICK_NEAR
-            };
-            let over = reach == Reach::Over;
             if over == ignoring {
                 ignoring = !over;
                 if let Err(e) = window.set_ignore_cursor_events(ignoring) {
