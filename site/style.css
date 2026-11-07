@@ -149,9 +149,12 @@ h1 {
   align-items: stretch;
 }
 .actions .button {
-  flex: 1 1 200px;
+  flex: 1 1 160px;
   align-items: center;
   text-align: center;
+}
+.actions .button.primary {
+  flex: 2 1 260px;
 }
 .button {
   display: inline-flex;
@@ -190,6 +193,7 @@ h1 {
 }
 .button-label {
   font-size: 1.05rem;
+  white-space: nowrap;
 }
 .button-meta {
   font-size: 0.8rem;
@@ -310,8 +314,8 @@ h2 {
 
 .gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
 }
 .gallery figure {
   margin: 0;
