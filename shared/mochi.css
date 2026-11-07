@@ -1,4 +1,8 @@
-/* Mochi mascot: stacked HTML layers so every animation is a composited transform (near-zero CPU). */
+/*
+ * Mochi mascot. Stacked HTML layers, so motion is composited transforms only.
+ * Motion is short one-shot acts (blink, bob, wiggle, hop) triggered from script: between acts nothing animates,
+ * so the compositor idles and Mochi costs near-zero CPU.
+ */
 .mochi {
   position: relative;
   aspect-ratio: 160 / 150;
@@ -14,76 +18,70 @@
   height: 100%;
   overflow: visible;
 }
-.mochi-body,
-.mochi-eyes,
-.mochi-leaf,
-.mochi-shadow {
-  will-change: transform;
-}
 .mochi-body {
   transform-origin: 50% 92%;
-  animation: mochi-breathe 4s ease-in-out infinite;
 }
 .mochi-shadow {
   transform-origin: 50% 94%;
-  animation: mochi-shadow 4s ease-in-out infinite;
 }
 .mochi-eyes {
   transform-origin: 50% 62%;
-  animation: mochi-blink 5.3s ease-in-out infinite;
 }
 .mochi-leaf {
   transform-origin: 54% 30%;
-  animation: mochi-sway 6s ease-in-out infinite;
 }
 
-/* Tip arrives: one happy hop, then back to breathing. */
-.mochi.is-hop .mochi-body {
-  animation: mochi-hop 0.7s cubic-bezier(0.3, 1.5, 0.5, 1), mochi-breathe 4s ease-in-out 0.7s infinite;
+.mochi.do-blink .mochi-eyes {
+  animation: mochi-blink 0.24s ease-in-out;
 }
-.mochi.is-hop .mochi-shadow {
-  animation: mochi-shadow-hop 0.7s ease-out, mochi-shadow 4s ease-in-out 0.7s infinite;
+.mochi.do-bob .mochi-body {
+  animation: mochi-bob 1.8s ease-in-out;
+}
+.mochi.do-bob .mochi-shadow {
+  animation: mochi-bob-shadow 1.8s ease-in-out;
+}
+.mochi.do-wiggle .mochi-leaf {
+  animation: mochi-wiggle 1.4s ease-in-out;
+}
+/* Tip arrives: one happy hop (wins over a bob on the same layer). */
+.mochi.do-hop .mochi-body {
+  animation: mochi-hop 0.7s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.mochi.do-hop .mochi-shadow {
+  animation: mochi-hop-shadow 0.7s ease-out;
 }
 
-/* User away: Mochi dozes (eyes shut, slow breath). */
+/* User away: Mochi dozes with its eyes shut. */
 .mochi.is-sleepy .mochi-eyes {
-  animation: none;
   transform: scaleY(0.12);
-}
-.mochi.is-sleepy .mochi-body {
-  animation-duration: 6.5s;
+  animation: none;
 }
 
-@keyframes mochi-breathe {
-  0%, 100% { transform: scale(1, 1); }
-  50% { transform: scale(1.035, 0.965); }
-}
-@keyframes mochi-shadow {
-  0%, 100% { transform: scaleX(1); }
-  50% { transform: scaleX(1.04); }
-}
 @keyframes mochi-blink {
-  0%, 92%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.1); }
+  50% { transform: scaleY(0.1); }
 }
-@keyframes mochi-sway {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(-7deg); }
+@keyframes mochi-bob {
+  35% { transform: scale(1.045, 0.955); }
+  70% { transform: scale(0.985, 1.015); }
+}
+@keyframes mochi-bob-shadow {
+  35% { transform: scaleX(1.05); }
+}
+@keyframes mochi-wiggle {
+  25% { transform: rotate(-10deg); }
+  60% { transform: rotate(5deg); }
 }
 @keyframes mochi-hop {
-  0% { transform: translateY(0) scale(1, 1); }
   25% { transform: translateY(0) scale(1.1, 0.88); }
   55% { transform: translateY(-16%) scale(0.94, 1.08); }
   80% { transform: translateY(0) scale(1.05, 0.95); }
-  100% { transform: translateY(0) scale(1, 1); }
 }
-@keyframes mochi-shadow-hop {
+@keyframes mochi-hop-shadow {
   55% { transform: scaleX(0.7); opacity: 0.6; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mochi *,
-  .mochi.is-hop * {
+  .mochi * {
     animation: none !important;
   }
 }
