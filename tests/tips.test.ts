@@ -64,4 +64,10 @@ test('trigger: start, back from idle, new app after cooldown, timer', () => {
   const startedAway = trigger(FIRST_WATCH, { idleSecs: AWAY_SECS + 20, app: 'code' }, t0, has);
   assert.equal(startedAway.reason, null, 'no start tip to an empty desk');
   assert.equal(trigger(startedAway.watch, { idleSecs: 0, app: 'code' }, t0 + 3000, has).reason, 'idle', 'welcome back instead');
+  const inNotepad = trigger(FIRST_WATCH, { idleSecs: 0, app: 'notepad' }, t0, has);
+  const switchedEarly = trigger(inNotepad.watch, { idleSecs: 0, app: 'code' }, t0 + 1000, has);
+  assert.equal(switchedEarly.reason, null, 'cooldown');
+  assert.equal(trigger(switchedEarly.watch, { idleSecs: 0, app: 'code' }, t0 + COOLDOWN_MS, has).reason, 'app', 'switch made in the cooldown still counts');
+  const idleStart = trigger(FIRST_WATCH, { idleSecs: AWAY_SECS + 1, app: 'notepad' }, t0, has);
+  assert.equal(trigger(idleStart.watch, { idleSecs: AWAY_SECS + 2, app: 'code' }, t0 + COOLDOWN_MS, has).reason, null, 'no app tip while away');
 });

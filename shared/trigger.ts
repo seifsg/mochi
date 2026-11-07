@@ -13,7 +13,7 @@ export interface Sense {
   readonly app: string | null;
 }
 
-/** What Mochi remembers between ticks. */
+/** What Mochi remembers between ticks (`app`: the last foreground app it has taken in). */
 export interface Watch {
   readonly started: boolean;
   readonly away: boolean;
@@ -34,7 +34,7 @@ function reasonFor(watch: Watch, sense: Sense, now: number, away: boolean, appHa
   if (!watch.started) return away ? null : 'start'; // started while away: stay quiet, welcome back instead
   if (watch.away && !away) return 'idle';
   if (now - watch.lastShown < COOLDOWN_MS) return null;
-  if (sense.app !== null && sense.app !== watch.app && appHasTips(sense.app)) return 'app';
+  if (!away && sense.app !== null && sense.app !== watch.app && appHasTips(sense.app)) return 'app';
   return !away && now - watch.lastShown >= TIMER_MS ? 'timer' : null;
 }
 
@@ -43,8 +43,10 @@ export function trigger(watch: Watch, sense: Sense, now: number, appHasTips: (ap
   if (!Number.isFinite(sense.idleSecs) || sense.idleSecs < 0) throw new RangeError(`idleSecs ${sense.idleSecs} is invalid`);
   const away = sense.idleSecs >= AWAY_SECS;
   const reason = reasonFor(watch, sense, now, away, appHasTips);
+  // An app switch is only taken in while Mochi may speak, so one made during the cooldown or while away still counts later.
+  const busy = away || now - watch.lastShown < COOLDOWN_MS;
   return {
     reason,
-    watch: { started: true, away, app: sense.app ?? watch.app, lastShown: reason ? now : watch.lastShown },
+    watch: { started: true, away, app: busy ? watch.app : (sense.app ?? watch.app), lastShown: reason ? now : watch.lastShown },
   };
 }

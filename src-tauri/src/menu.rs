@@ -82,6 +82,7 @@ pub fn open_menu(window: WebviewWindow, items: tauri::State<'_, MochiMenu>) -> R
         .map_err(|e| format!("menu did not open: {e}"))
 }
 
+/// Mochi's window, if it exists.
 fn main_window(app: &AppHandle) -> Option<WebviewWindow> {
     app.get_webview_window("main")
 }

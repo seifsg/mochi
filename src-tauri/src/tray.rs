@@ -23,6 +23,7 @@ pub fn create(app: &AppHandle) -> tauri::Result<()> {
     Ok(())
 }
 
+/// Tray tooltip text for the mute state.
 fn tooltip(muted: bool) -> &'static str {
     if muted {
         "Mochi (muted)"

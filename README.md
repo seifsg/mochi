@@ -6,14 +6,14 @@ A cute desk mascot for Windows that pops short, helpful tips on your screen, pic
 
 ## Install
 
-Download `Mochi-setup.exe` from the [latest release](https://github.com/seifsg/mochi/releases/latest) and run it (Windows 10 or 11). Mochi appears at the bottom-right of your screen. Until the first release is out, run it from source (below).
+Download `Mochi-setup.exe` from the [latest release](https://github.com/seifsg/mochi/releases/latest) and run it (built and tested on Windows 11). Mochi appears at the bottom-right of your screen. Until the first release is out, run it from source (below).
 
 - Drag Mochi anywhere. Tap Mochi for a tip; tap the bubble to hide it.
 - Right-click Mochi (or its tray icon): **Show a tip**, **Mute tips**, **Hide Mochi**, **Start with Windows**, **Quit Mochi**. A hidden Mochi comes back with **Show Mochi** in the tray.
 
 ## Run from source
 
-Needs Node 22+, Rust stable (MSVC build tools on Windows) and WebView2 (built into Windows 11).
+Needs Node 22.18+ (tests use its built-in TypeScript support), Rust stable (MSVC build tools on Windows) and WebView2 (built into Windows 11).
 
 ```bash
 npm ci

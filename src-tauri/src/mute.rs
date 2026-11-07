@@ -27,6 +27,7 @@ impl Mute {
         }
     }
 
+    /// Current mute state (read by the UI on every poll).
     pub fn is_on(&self) -> bool {
         self.on.load(Ordering::Relaxed)
     }

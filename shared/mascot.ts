@@ -9,8 +9,12 @@ const IDLE_ACTS = ['do-blink', 'do-blink', 'do-blink', 'do-bob', 'do-wiggle', 'd
 /** Pause between idle acts: 3-8 s, so the compositor rests most of the time. */
 const nextPause = (): number => 3_000 + Math.random() * 5_000;
 
-/** Restarts a one-shot animation class. */
+/** Reduced motion turns animations off, so no animationend would ever clear a one-shot class. */
+const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+/** Restarts a one-shot animation class (skipped under reduced motion, where it could never end). */
 function play(root: HTMLElement, act: string): void {
+  if (still.matches) return;
   root.classList.remove(act);
   void root.offsetWidth; // reflow, so re-adding the class restarts the animation
   root.classList.add(act);

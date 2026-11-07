@@ -23,10 +23,12 @@ pub struct Rect {
 }
 
 impl Rect {
+    /// True when the point (CSS px) is inside the rect.
     fn contains(&self, x: f64, y: f64) -> bool {
         x >= self.x && x < self.x + self.w && y >= self.y && y < self.y + self.h
     }
 
+    /// Finite numbers and a non-negative size: what the UI is allowed to send.
     fn is_valid(&self) -> bool {
         [self.x, self.y, self.w, self.h]
             .iter()
