@@ -47,6 +47,11 @@ function boot(): void {
   const brain = createBrain(parseTips(rawTips), speak, mascot.doze);
   // Tap: hide the open bubble, or poke Mochi for a tip.
   makeDraggable(byId('stage'), () => (bubble.isOpen() ? bubble.hide() : brain.say('manual')));
+  // Right-click: Mochi's own menu (Show a tip, Mute, Hide, Quit...) instead of the browser's.
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    invoke('open_menu').catch((error: unknown) => void warn(`menu failed: ${String(error)}`));
+  });
   // Tray (and a second launch) talk to the UI through these events; names match src-tauri/src/tray.rs.
   const failed = (error: unknown): void => void warn(`tray events unavailable: ${String(error)}`);
   listen('tray://tip-now', () => brain.say('manual')).catch(failed);

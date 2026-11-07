@@ -1,5 +1,6 @@
 mod context;
 mod hit;
+mod menu;
 mod mute;
 mod tray;
 mod window;
@@ -22,9 +23,9 @@ fn logger() -> tauri_plugin_log::Builder {
 /// Builds and runs the Mochi app.
 pub fn run() {
     tauri::Builder::default()
-        // First plugin: a second launch pokes the running Mochi instead of opening a twin.
+        // First plugin: a second launch wakes the running Mochi instead of opening a twin.
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
-            tray::emit(app, tray::TIP_NOW, ());
+            menu::wake(app);
         }))
         .plugin(logger().build())
         .plugin(
@@ -43,14 +44,17 @@ pub fn run() {
             }
             _ => {}
         })
+        .on_menu_event(menu::on_event)
         .invoke_handler(tauri::generate_handler![
             context::context,
-            hit::set_hit_rects
+            hit::set_hit_rects,
+            menu::open_menu
         ])
         .setup(|app| {
             let hits = hit::HitMap::default();
             app.manage(hits.clone());
             app.manage(mute::Mute::load(app.handle()));
+            app.manage(menu::MochiMenu::build(app.handle())?);
             tray::create(app.handle())?;
             let window = window::create(app.handle())?;
             window.show()?;
